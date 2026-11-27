@@ -1,6 +1,4 @@
 import allure
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
 from pages.base_page import BasePage
 from locators.order_feed_locators import OrderFeedLocators
 from data import Urls
@@ -14,16 +12,19 @@ class OrderFeedPage(BasePage):
     
     @allure.step("Получить локатор счётчика '{title}'")
     def _counter_locator(self, title):
-        return By.XPATH, OrderFeedLocators.COUNTER_TPL.format(title=title)
+        by, template = OrderFeedLocators.COUNTER_TPL
+        return by, template.format(title=title)
 
-    @allure.step("Получить локатор заказа №{number} в ленте")
+    @allure.step("Получить локатор заказа №{number} в ленте")         
     def _order_in_feed_locator(self, number):
-        return By.XPATH, OrderFeedLocators.ORDER_IN_FEED_TPL.format(number=number)
+        by, template = OrderFeedLocators.ORDER_IN_FEED_TPL
+        return by, template.format(number=number)
     
     @allure.step("Получить локатор заказа №{number} в работе")
     def _order_in_progress_locator(self, number):
-        return By.XPATH, OrderFeedLocators.ORDER_IN_PROGRESS_TPL.format(number=number)
-
+        by, template = OrderFeedLocators.ORDER_IN_PROGRESS_TPL
+        return by, template.format(number=number)
+    
     @allure.step("Считать значение счётчика «{title}»")
     def counter(self, title):
         raw = self.get_text(self._counter_locator(title))
@@ -39,16 +40,10 @@ class OrderFeedPage(BasePage):
 
     @allure.step("Найти заказ №{number} в ленте")
     def wait_for_order(self, number):
-        self.wait_until(
-            EC.visibility_of_element_located(self._order_in_feed_locator(number)),
-            f"Заказ №{number} не появился в ленте",
-        )
+        self.find_element_with_wait(self._order_in_feed_locator(number))
 
     @allure.step("Найти заказ №{number} в разделе «В работе»")
     def order_is_in_progress(self, number):
-        element = self.wait_until(
-            EC.visibility_of_element_located(self._order_in_progress_locator(number)),
-            f"Заказ №{number} не появился в разделе «В работе»",
-        )
+        element = self.find_element_with_wait(self._order_in_progress_locator(number))
         return element.is_displayed()
     

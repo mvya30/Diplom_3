@@ -22,10 +22,6 @@ def main_page(driver):
     return MainPage(driver)
 
 @pytest.fixture
-def order_feed_page(driver):
-    return OrderFeedPage(driver)
-
-@pytest.fixture
 def authorized_driver(driver):
     """Авторизует тестового пользователя (готовый креды из data.py) и возвращает driver."""
     login = LoginPage(driver)

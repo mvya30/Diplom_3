@@ -5,19 +5,19 @@ from data import Data
 class TestMainFunctionality:
 
     @allure.title("Переход по клику на 'Конструктор'")
-    def test_go_to_constructor(self, driver, main_page):
+    def test_go_to_constructor(self, main_page):
         main_page.open()
         main_page.click_order_feed() 
-        assert "feed" in driver.current_url
+        assert main_page.url_contains("feed")
         main_page.click_constructor()
         assert main_page.is_constructor_visible(), \
             "Не перешли на главную страницу (конструктор не виден)"
         
     @allure.title("Переход по клику на 'Лента заказов'")
-    def test_go_to_order_feed(self, driver, main_page):
+    def test_go_to_order_feed(self, main_page):
         main_page.open()
         main_page.click_order_feed()
-        assert "feed" in driver.current_url
+        assert main_page.url_contains("feed")
 
     @allure.title("Клик по ингредиенту открывает модальное окно")
     def test_open_ingredient_modal(self, main_page):
